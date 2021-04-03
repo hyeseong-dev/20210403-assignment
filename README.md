@@ -7,7 +7,8 @@
 ## **🏠Swagger **
 링크 - https://documenter.getpostman.com/view/14042841/TzCP8Tc4
 
-![image](https://user-images.githubusercontent.com/57933835/113472103-a7251880-949b-11eb-955e-320246f15edc.png)
+
+![image](https://user-images.githubusercontent.com/57933835/113472595-51526f80-949f-11eb-838f-135cf0da7a2d.png)
 ---
 ![image](https://user-images.githubusercontent.com/57933835/113472401-fa986600-949d-11eb-88e3-529e3f8fef74.png)
 ---
