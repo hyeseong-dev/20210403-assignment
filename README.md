@@ -4,7 +4,7 @@
 - 진행기간 : 2021년 04월 02일 ~ 2021년 04월 03일
 
 
-## **🏠Swagger **
+## **🏠POSTMAN **
 링크 - https://documenter.getpostman.com/view/14042841/TzCP8Tc4
 
 
