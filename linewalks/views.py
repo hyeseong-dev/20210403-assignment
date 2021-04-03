@@ -1,5 +1,6 @@
 import re
 import json
+from math                   import ceil
 
 from django.http            import JsonResponse
 from django.views           import View
@@ -88,30 +89,83 @@ class ConceptListView(View):
         + 키워드 검색   
     '''
     def get(self,request):
-        keyword= request.GET.get('keyword')
         page = int(request.GET.get('page', 1))
 
         PAGE_SIZE = 50
         limit  = page * PAGE_SIZE  
         offset = limit - PAGE_SIZE 
         
-        concepts = Concept.objects.all().\
-            only('concept_id', 'concept_name').\
-            filter(Q(concept_name__icontains=keyword)|
-                   Q(concept_name__iexact=keyword))[offset:limit]
-        total_cnt = Concept.objects.count()
+        concepts   = Concept.objects.values('concept_id', 'concept_name')
+        people     = Person.objects.values('gender_concept_id','ethnicity_source_value')
+        drugs      = DrugExposure.objects.values('drug_concept_id')
+        conditions = ConditionOccurrence.objects.values('condition_concept_id')
 
-        results = [{
-            'concept_id'    : concept.concept_id,
-            'concept_name'  : concept.concept_name,
-        }for concept in concepts]
+        results = {}
+
+        results['persons'] = [{
+            'gender_concept_id'      : p['gender_concept_id'],
+            'ethnicity_source_value' : p['ethnicity_source_value'],
+        }for p in people[offset:limit]]
+
+        results['concepts'] = [{
+            'concept_id'    : c['concept_id'],
+            'concept_name'  : c['concept_name'],
+        }for c in concepts[offset:limit]]
+        
+        results['conditions'] = [{
+            'condition_concept_id'    : c['condition_concept_id'],
+        }for c in conditions[offset:limit]]
+
+        results['drugs'] = [{
+            'drug_concept_id'    : d['drug_concept_id'],
+        }for d in drugs[offset:limit]]
+        
         
         if results:
             return JsonResponse({
-                '전체 Concent 개수' :total_cnt,
-                '페이지'            : f"{page}//{total_cnt//PAGE_SIZE}",
-                '결과'           :results,}, status=200)
+                "페이지" : f'{page} / {ceil(concepts.count()/PAGE_SIZE)}',
+                '총 조회 건수': {
+                    'people'     :'{:,}'.format(people.count())+' 건',
+                    'concepts'   :'{:,}'.format(concepts.count())+' 건',
+                    'drugs'      :'{:,}'.format(drugs.count())+' 건',
+                    'conditions' :'{:,}'.format(conditions.count())+' 건',
+                },
+                '결과':results,
+                }, status=200)
         return JsonResponse({'message':'INVALID_REQUEST'}, status=400)
+
+# class ConceptListView(View):
+#     '''
+#     concept_id의 정보를 얻을 수 있는 API입니다.
+#     - 쿼리 파라미터를 이용 
+#         + 검색 기능   
+#         + 키워드 검색   
+#     '''
+#     def get(self,request):
+#         keyword= request.GET.get('keyword')
+#         page = int(request.GET.get('page', 1))
+
+#         PAGE_SIZE = 50
+#         limit  = page * PAGE_SIZE  
+#         offset = limit - PAGE_SIZE 
+        
+#         concepts = Concept.objects.all().\
+#             only('concept_id', 'concept_name').\
+#             filter(Q(concept_name__icontains=keyword)|
+#                    Q(concept_name__iexact=keyword))[offset:limit]
+#         total_cnt = Concept.objects.count()
+
+#         results = [{
+#             'concept_id'    : concept.concept_id,
+#             'concept_name'  : concept.concept_name,
+#         }for concept in concepts]
+        
+#         if results:
+#             return JsonResponse({
+#                 '전체 Concent 개수' :total_cnt,
+#                 '페이지'            : f"{page}//{total_cnt//PAGE_SIZE}",
+#                 '결과'           :results,}, status=200)
+#         return JsonResponse({'message':'INVALID_REQUEST'}, status=400)
 
 
 class SearchView(View):
@@ -185,15 +239,22 @@ class SearchView(View):
             'drug_exposure_end_datetime'   : d.drug_exposure_end_datetime,
             'visit_occurrence_id'          : d.visit_occurrence_id,
             }for d in drug_exposures[offset:limit] ]
+                
+        pcnt = people.count()
+        vcnt = visit_occurrences.count()
+        dcnt = drug_exposures.count()
+        ccnt  = condition_occurrences.count()
+        max_page = max(pcnt, vcnt, dcnt,ccnt)
 
         if results:
             return JsonResponse({
             'message':'SUCCESS',
-            '조회 건수':{
-                'people'                : people.count(),
-                'visit_occurrences'     : visit_occurrences.count(),
-                'condition_occurrences' : condition_occurrences.count(),
-                'drug_exposures'        : drug_exposures.count(),
+            "페이지" : f'{page} / {ceil(max_page/PAGE_SIZE)}',
+            '조회 건수': {
+                'people'     :'{:,}'.format(pcnt)+' 건',
+                'concepts'   :'{:,}'.format(vcnt)+' 건',
+                'drugs'      :'{:,}'.format(dcnt)+' 건',
+                'conditions' :'{:,}'.format(cnt)+' 건',
             },
             '결과':results}, status=200)
         return JsonResponse({'message':'INVALID_REQUEST'}, status=400)
