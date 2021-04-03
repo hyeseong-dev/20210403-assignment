@@ -27,7 +27,7 @@
 
 ## **🏠** 
 
-> git clone 
+> git clone git@github.com:hyeseong-dev/20210403-assignment.git
 > pip install -r requirements.txt
 > 
 
