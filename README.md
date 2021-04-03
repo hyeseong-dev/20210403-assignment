@@ -124,7 +124,22 @@ death
 
 ---
 
-# 🏠후기
+# 🏠DB 튜닝
+
+![image](https://user-images.githubusercontent.com/57933835/113472898-0d606a00-94a1-11eb-86c9-59803375c885.png)
+
+DB최적화를 위하여 최소한의 쿼리를 이용해 데이터를 불러와야 하는데요.
+여러 방법이 존재하지만 django ORM에서는 대표적으로 select_related, prefech_related를 사용해야 하는데요. 
+결국 정참조와, 역참조를 통한 DB히트를 최소한으로 하기 위한 메소드입니다. 
+
+이번 과제에서는 `inspectdb` 명령어를 사용했기에 기존에 이미 외부에서 만들어진 스키마의 구조를 본떠서 만들어 왔기에 
+ForeignKey, OneToOne, Manytomany 필드들이 제대로 정의되지 못한 내부적 문제로 인해 filter()메서드를 통해서 정참조와 역참조를 하였습니다.
+하지만 values(), only(), defer()등과 같은 메서드를 사용하여 필요한 컬럼들에만 국한하여 사용하였기에 최대 불필요한 컬럼의 접근을 제한하였습니다.
+
+추후 더 효과적인 DB optimization을 위한 방법을 위해 최적화에 대한 외국 사이트의 가이드라인을 참고하여 적용해 볼 예정입니다. 
+
+관련 링크 : https://docs.djangoproject.com/en/3.1/topics/db/optimization/
+
 
 ## 🧑‍💻연락
 
