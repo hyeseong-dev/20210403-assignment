@@ -7,8 +7,8 @@ from django.views           import View
 from django.db.models       import Q
 from django.db              import IntegrityError
 
-
 from decorator              import query_debugger
+
 from linewalks.models       import (
     Person,
     VisitOccurrence,
@@ -24,6 +24,7 @@ class PatientView(View):
     """
     성, 인종, 민족 환자수를 분류하여 해당 카테고리의 환자 수를 제공함은 물론 전체 환자 수와 사망자 수에 대한 정보 역시 제공하는 API
     """
+
     @query_debugger
     def get(self, request):
         queryset = Person.objects.all().\
@@ -138,7 +139,7 @@ class ConceptListView(View):
                 }, status=200)
         return JsonResponse({'message':'INVALID_REQUEST'}, status=400)
 
-
+      
 class SearchView(View):
     """
     각 테이블의 row를 조회하는 API를 구현합니다.
@@ -237,5 +238,4 @@ class SearchView(View):
                 'conditions' :'{:,}'.format(cnt)+' 건',
             },
             '결과':results}, status=200)
-        return JsonResponse({'message':'INVALID_REQUEST'}, status=400)
-                        
+        return JsonResponse({'message':'INVALID_REQUEST'}, status=400)                    
