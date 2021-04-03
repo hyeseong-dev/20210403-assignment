@@ -7,25 +7,21 @@
 ## **🏠Swagger **
 링크 - https://documenter.getpostman.com/view/14042841/TzCP8Tc4
 
-[사진0]
 ![image](https://user-images.githubusercontent.com/57933835/113472103-a7251880-949b-11eb-955e-320246f15edc.png)
+---
 ![image](https://user-images.githubusercontent.com/57933835/113472401-fa986600-949d-11eb-88e3-529e3f8fef74.png)
-
-[사진1]
+---
 ![image](https://user-images.githubusercontent.com/57933835/113471999-13ebe300-949b-11eb-95cf-cbe6d325d563.png)
-
-[사진2]
+---
 ![image](https://user-images.githubusercontent.com/57933835/113472039-43025480-949b-11eb-8b2f-4026fd130451.png)
-
-[사진3]
+---
 ![image](https://user-images.githubusercontent.com/57933835/113472076-88bf1d00-949b-11eb-8ea0-10916c6a92b5.png)
-
-[사진4]
+---
 ![image](https://user-images.githubusercontent.com/57933835/113471960-e4d57180-949a-11eb-9cd4-b173504d46fb.png)
 
 
 
-## **🏠** 
+## **🏠 클론 및 설치** 
 
 > git clone https://github.com/hyeseong-dev/20210403-assignment.git
 > pip install -r requirements.txt
