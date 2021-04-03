@@ -7,6 +7,8 @@ from django.views           import View
 from django.db.models       import Q
 from django.db              import IntegrityError
 
+
+from decorator              import query_debugger
 from linewalks.models       import (
     Person,
     VisitOccurrence,
@@ -22,8 +24,8 @@ class PatientView(View):
     """
     성, 인종, 민족 환자수를 분류하여 해당 카테고리의 환자 수를 제공함은 물론 전체 환자 수와 사망자 수에 대한 정보 역시 제공하는 API
     """
+    @query_debugger
     def get(self, request):
-        print('='*100)
         queryset = Person.objects.all().\
             values('gender_concept_id','race_source_value', 'ethnicity_source_value')
         
@@ -53,6 +55,7 @@ class VisitView(View):
     """
     방문 유형(입원/외래/응급), 성, 인종, 민족, 연령대로 분류하여 방문자수 정보를 제공하는 API
     """
+    @query_debugger
     def get(self, request):
         queryset = VisitOccurrence.objects.select_related('person')
         
@@ -88,6 +91,7 @@ class ConceptListView(View):
         + 검색 기능   
         + 키워드 검색   
     '''
+    @query_debugger
     def get(self,request):
         page = int(request.GET.get('page', 1))
 
@@ -144,6 +148,7 @@ class SearchView(View):
         - 특정 컬럼 검색 기능
             + 키워드 검색
     """
+    @query_debugger
     def get(self, request):
 
         page = int(request.GET.get('page', 1))
